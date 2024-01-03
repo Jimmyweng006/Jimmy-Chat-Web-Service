@@ -34,7 +34,7 @@ export default {
       };
 
       try {
-        const response = await fetch('http://localhost:8080/logIn', {
+        const response = await fetch(`${process.env.VUE_APP_API_ENDPOINT}/logIn`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

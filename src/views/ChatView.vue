@@ -56,7 +56,7 @@ export default {
         connectToWebSocket() {
             const token = localStorage.getItem('token'); // 從 localStorage 獲取 JWT
             if (token) {
-                this.ws = new WebSocket('ws://localhost:8080/chat?token=' + encodeURIComponent(token));
+                this.ws = new WebSocket(`${process.env.VUE_APP_WEB_SOCKET_ENDPOINT}/chat?token=` + encodeURIComponent(token));
 
                 this.ws.onopen = () => {
                     console.log('Connected to the websocket server');
