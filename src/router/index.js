@@ -21,7 +21,6 @@ const router = createRouter({
       name: 'Chat',
       component: ChatView
     },
-    // 其他路由...
   ],
 });
 
