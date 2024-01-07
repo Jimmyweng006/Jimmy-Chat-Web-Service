@@ -6,8 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        VUE_APP_API_ENDPOINT: "http://139.59.239.13:8080"
-        VUE_APP_WEB_SOCKET_ENDPOINT: "ws://139.59.239.13:8080"
+        VUE_APP_API_ENDPOINT: "http://jimmy-kiet.tech:8080"
+        VUE_APP_WEB_SOCKET_ENDPOINT: "ws://jimmy-kiet.tech:8080"
     ports:
       - "80:80" # local 80 port map to container 80 port
     environment:
