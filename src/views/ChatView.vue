@@ -3,7 +3,10 @@
         <div class="chat-messages">
             <!-- 消息列表 -->
             <div v-for="message in messages" :key="message.id" class="message" :class="{ 'outgoing': message.isOutgoing }">
-                <div class="message-content">{{ message.text }}</div>
+                <div class="message-content">
+                    <span v-if="!message.isOutgoing" class="message-sender">{{ message.sender }}:</span>
+                    {{ message.text }}
+                </div>
             </div>
         </div>
         <div class="message-input">
@@ -18,13 +21,8 @@ export default {
     data() {
         return {
             newMessage: '',
-            messages: [
-                // 示例消息
-                { id: 1, text: 'Hello there!', isOutgoing: false },
-                { id: 2, text: 'Hi! How can I help you?', isOutgoing: true },
-                // 更多消息...
-            ],
-            ws: null, // WebSocket 實例
+            messages: [],
+            ws: null,
         };
     },
     mounted() {
@@ -66,7 +64,19 @@ export default {
 
                 this.ws.onmessage = (event) => {
                     console.log('Message from server', event.data);
-                    // 處理從服務器收到的消息
+                    try {
+                        const receivedMessage = JSON.parse(event.data);
+
+                        const message = {
+                            id: this.messages.length + 1,
+                            text: receivedMessage.Content,
+                            sender: receivedMessage.Sender,
+                            isOutgoing: false,
+                        };
+                        this.messages.push(message);
+                    } catch (error) {
+                        console.error('Error parsing message:', error);
+                    }
                 };
 
                 this.ws.onerror = (error) => {
@@ -133,6 +143,10 @@ export default {
     border-radius: 8px;
 }
 
+.message-sender {
+  font-weight: bold; /* Optional: makes the sender's name bold */
+}
+
 .outgoing .message-content {
     background-color: #b2f7ef;
     /* 發送者的消息背景色 */
@@ -168,4 +182,5 @@ button {
 
 button:hover {
     background-color: #3f51b5;
-}</style>
+}
+</style>
