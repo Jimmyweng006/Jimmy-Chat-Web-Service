@@ -47,6 +47,7 @@ export default {
 
         const respBody = await response.json();
         console.log('respBody:', respBody);
+        this.$router.push('/logIn');
         // 根據需要進行後續處理，例如導航到其他頁面或顯示錯誤消息
       } catch (err) {
         console.error('Request failed:', err);
