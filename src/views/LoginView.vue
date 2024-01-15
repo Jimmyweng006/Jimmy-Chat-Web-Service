@@ -57,6 +57,7 @@ export default {
         
         // 存儲 token 並跳轉到 /chat
         localStorage.setItem('token', respBody.token);
+        localStorage.setItem('username', this.username);
         this.$router.push('/chat');
       } catch (err) {
         console.error('Request failed:', err);

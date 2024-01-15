@@ -27,6 +27,7 @@ export default {
     },
     mounted() {
         this.connectToWebSocket();
+        this.fetchChatHistory(); // 在組件掛載時調用
     },
     methods: {
         sendMessage() {
@@ -92,6 +93,34 @@ export default {
                 console.error('No token found');
             }
         },
+        fetchChatHistory() {
+            fetch(`${process.env.VUE_APP_API_ENDPOINT}/chat/messages`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    this.handleChatHistory(data);
+                })
+                .catch(error => {
+                    console.error('Fetching chat history failed:', error);
+                });
+        },
+        handleChatHistory(responseData) {
+            if (responseData && Array.isArray(responseData.data)) {
+                responseData.data.forEach(historyMessage => {
+                    const message = {
+                        id: this.messages.length + 1,
+                        text: historyMessage.Content,
+                        sender: historyMessage.Sender,
+                        isOutgoing: historyMessage.Sender == localStorage.getItem('username'),
+                    };
+                    this.messages.push(message);
+                });
+            }
+        },
     },
     beforeUnmount() {
         if (this.ws) {
@@ -144,7 +173,8 @@ export default {
 }
 
 .message-sender {
-  font-weight: bold; /* Optional: makes the sender's name bold */
+    font-weight: bold;
+    /* Optional: makes the sender's name bold */
 }
 
 .outgoing .message-content {
